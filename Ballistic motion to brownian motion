@@ -1,0 +1,42 @@
+clear;
+clc;
+ x(1)=0; %initial conditions
+ x(2)=0;
+deltaT = 1*10^-6;
+R=1*10^-6; %radius taken in meter
+m=11*10^-15; %mass taken in kg
+n=0.001; %viscosity
+gamma=6*pi*n*R;
+T=300; %temperature in Kelvin
+tau=m/gamma; %momentum relaxation constant
+kb=1.38*10^-23; %Boltzmann constant
+N=1000;
+w = randn(N,1) * sqrt(1) + 0;
+D=(kb*T)/gamma; %diffusion coefficient
+v=1*10^-6;
+
+for i=3:N
+   
+    x(i)= ((2+deltaT*(1/tau))/(1+deltaT*(1/tau)))*x(i-1)...
+    -(1/(1+deltaT*(1/tau)))*x(i-2)...
+    +(sqrt(2*kb*T*gamma)/(m+deltaT*gamma))*randn()+(v*cos(sqrt(2*D*deltaT)*randn())*deltaT);
+end
+
+t = [0:deltaT:(N-1)*deltaT];
+
+plot(t,x)
+xlabel('time [s]')
+ylabel('x [m]')
+hold on
+
+%without inertia
+for j=2:N
+x(j)=x(j-1)+sqrt(2*D*deltaT)*randn()+(v*cos(sqrt(2*D*deltaT)*randn())*deltaT);
+end
+plot(t,x,'--')
+xlabel('time [s]')
+ylabel('x [m]')
+box on;
+
+
+    
